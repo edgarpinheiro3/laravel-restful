@@ -103,6 +103,7 @@ class ProductController extends Controller
 
             return response()->json(['error', 'product_not_update'], 500);
 
+        //PUT
         return response()->json(['response' => $update]);
 
     }
@@ -115,6 +116,18 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        //
+
+        if ( !$product = $this->product->find($id) )
+
+            return response()->json(['error', 'product_not_found']);
+        
+            if ( !$delete = $product->delete() )
+
+            return response()->json(['error', 'product_not_delete'], 500);
+
+        //DELETE
+        return response()->json(['response' => $delete]);
+
+
     }
 }
