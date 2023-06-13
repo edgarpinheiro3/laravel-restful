@@ -1,11 +1,15 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\API\ProductController;
+use App\Http\Controllers\Api\V1\ProductController;
 
-Route::resource('products', ProductController::class, 
-    ['except' =>[
-        'create',
-        'edit'
-    ]
-]);
+Route::prefix('v1')->group(function () {
+
+    Route::resource('products', ProductController::class, 
+        ['except' =>[
+            'create',
+            'edit'
+        ]
+    ]);
+
+});
