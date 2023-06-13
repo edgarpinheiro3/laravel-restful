@@ -9,6 +9,7 @@ use App\Models\Product;
 class ProductController extends Controller
 {
     private $product;
+    private $totalPage = 15;
 
     public function __construct(Product $product){
         $this->product = $product;
@@ -22,7 +23,7 @@ class ProductController extends Controller
     public function index()
     {
 
-        $products = $this->product->all();
+        $products = $this->product->paginate($this->totalPage);
 
         return response()->json(['data' => $products]);
     }
@@ -127,6 +128,26 @@ class ProductController extends Controller
 
         //DELETE
         return response()->json(['response' => $delete]);
+
+
+    }
+
+    public function search(Request $request)
+    {
+
+        $data = $request->all();
+
+        $validate = validator($data, $this->product->rulesSearch());
+
+        if ( $validate->fails() ) {
+            $messages = $validate->messages();
+
+            return response()->json(['validate.error', $messages]);
+        }
+
+        $products = $this->product->search($data, $this->totalPage);
+        
+        return response()->json(['data' => $products]);
 
 
     }
